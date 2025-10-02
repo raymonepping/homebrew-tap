@@ -32,7 +32,13 @@ class VaultDoctor < Formula
     bin.install target => "vault_doctor"
   end
 
-  test do:
-    assert_match "Usage:", shell_output("#{bin}/vault_doctor -h")
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
+
+  test do
+    # Check version prints and binary runs
+    assert_match version.to_s, shell_output("#{bin}/vault_doctor -V")
   end
 end
