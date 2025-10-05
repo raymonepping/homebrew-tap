@@ -1,18 +1,20 @@
 class VaultDoctor < Formula
   desc "Medic for HashiCorp Vault: health, caps, KV, transit"
   homepage "https://github.com/raymonepping/vault_doctor"
-  version "0.3.2"
-  url "https://github.com/raymonepping/vault_doctor/archive/refs/tags/v0.3.2.tar.gz"
-  sha256 "11049086892651c8b0939b984629656c6c55896515cff4fbf2cbdba5796119b4"
+  version "0.3.3"
+  url "https://github.com/raymonepping/vault_doctor/archive/refs/tags/v0.3.3.tar.gz"
+  sha256 "906dcbafd5dde6e7da3bfdf0893d527208a7b3d7649590a3d29cbfc0c1def5eb"
   license "MPL-2.0"
 
   depends_on "go" => :build
 
   def install
-    ldflags = %W[
-      -s -w
-      -X github.com/raymonepping/vault_doctor/internal/version.Version=#{version}
-    ].join(" ")
+    mod = Utils.safe_popen_read("go", "list", "-m").chomp
+    # Inject *with* leading v so the stored var is v0.x.y; your -V strips it.
+    ldflags = "-s -w -X #{mod}/internal/version.Version=v#{version}"
+
+    ohai "Module: #{mod}"
+    ohai "ldflags: #{ldflags}"
     system "go", "build", "-trimpath", "-ldflags", ldflags, "-o", bin/"vault_doctor", "./cmd/vault_doctor"
   end
 
