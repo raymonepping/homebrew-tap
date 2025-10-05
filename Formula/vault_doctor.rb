@@ -11,12 +11,12 @@ class VaultDoctor < Formula
   def install
     ldflags = %W[
       -s -w
-      -X github.com/raymonepping/vault_doctor/internal/version.Version=\#{version}
+      -X github.com/raymonepping/vault_doctor/internal/version.Version=#{version}
     ].join(" ")
     system "go", "build", "-trimpath", "-ldflags", ldflags, "-o", bin/"vault_doctor", "./cmd/vault_doctor"
   end
 
   test do
-    assert_match version.to_s, shell_output("\#{bin}/vault_doctor -V")
+    assert_match version.to_s, shell_output("#{bin}/vault_doctor -V")
   end
 end
