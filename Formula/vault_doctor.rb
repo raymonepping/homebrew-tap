@@ -1,7 +1,7 @@
 class VaultDoctor < Formula
   desc "Medic for HashiCorp Vault: health, caps, KV, transit"
   homepage "https://github.com/raymonepping/vault_doctor"
-  version "v0.2.5"
+  version "0.2.5"
   url "https://github.com/raymonepping/vault_doctor/archive/refs/tags/v0.2.5.tar.gz"
   sha256 "75466dbece7c97c88bba38d111bdc52fa2a8da5021ffa9cc779e7db83ca439a9"
   license "MPL-2.0"
