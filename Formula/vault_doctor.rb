@@ -12,12 +12,12 @@ class VaultDoctor < Formula
     mod = Utils.safe_popen_read("go", "list", "-m").chomp
     ldflags = [
       "-s -w",
-      "-X \#{mod}/internal/version.Version=v\#{version}",
-      "-X main.buildVersion=v\#{version}",
+      "-X #{mod}/internal/version.Version=v#{version}",
+      "-X main.buildVersion=v#{version}",
     ].join(" ")
 
-    ohai "Module: \#{mod}"
-    ohai "ldflags: \#{ldflags}"
+    ohai "Module: #{mod}"
+    ohai "ldflags: #{ldflags}"
 
     system "go", "build",
            "-trimpath",
@@ -27,6 +27,6 @@ class VaultDoctor < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("\#{bin}/vault_doctor -V")
+    assert_match version.to_s, shell_output("#{bin}/vault_doctor -V")
   end
 end
