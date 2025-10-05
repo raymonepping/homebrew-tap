@@ -9,10 +9,14 @@ class VaultDoctor < Formula
   depends_on "go" => :build
 
   def install
-    ldflags = %W[
-      -s -w
-      -X github.com/raymonepping/vault_doctor/internal/version.Version=#{version}
+    mod = Utils.safe_popen_read("go", "list", "-m").chomp
+    ldflags = [
+      "-s -w",
+      "-X \#{mod}/internal/version.Version=v\#{version}",
+      "-X main.buildVersion=v\#{version}",
     ].join(" ")
+    ohai "Module: \#{mod}"
+    ohai "ldflags: \#{ldflags}"
     system "go", "build", "-trimpath", "-ldflags", ldflags, "-o", bin/"vault_doctor", "./cmd/vault_doctor"
   end
 
