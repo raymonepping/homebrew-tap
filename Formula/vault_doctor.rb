@@ -1,9 +1,9 @@
 class VaultDoctor < Formula
   desc "Medic for HashiCorp Vault: health, caps, KV, transit"
   homepage "https://github.com/raymonepping/vault_doctor"
-  version "0.3.0"
-  url "https://github.com/raymonepping/vault_doctor/archive/refs/tags/v0.3.0.tar.gz"
-  sha256 "541448050396d8b0ce1706881456600c85fd3ffed5e9e46057d64c1b8aa98a2e"
+  version "0.3.1"
+  url "https://github.com/raymonepping/vault_doctor/archive/refs/tags/v0.3.1.tar.gz"
+  sha256 "f6c637f81b8cf2dda5d920b74f065d6cb046651fcaca5e8643f0c38cc41c08f9"
   license "MPL-2.0"
 
   depends_on "go" => :build
