@@ -1,0 +1,55 @@
+class GenerateProject < Formula
+  desc "Scaffold projects with local Claude Code and Codex workspaces"
+  homepage "https://github.com/raymonepping/generate_project"
+  version "2.1.3"
+  url "https://github.com/raymonepping/generate_project/archive/refs/tags/v2.1.3.tar.gz"
+  sha256 "fbdfff8323583e3542177be28457a275ff66e47e0389db40fd0dce3f2ea26341"
+  license "GPL-3.0-only"
+
+  depends_on "bash"
+  depends_on "git"
+
+  def install
+    libexec.install "bin", "tpl", ".version"
+    bin.mkpath
+
+    (bin/"generate_project").write <<~SH
+      #!/usr/bin/env bash
+      exec "#{Formula["bash"].opt_bin}/bash" "#{libexec}/bin/generate_project.sh" "$@"
+    SH
+    (bin/"generate_project").chmod 0755
+  end
+
+  def caveats
+    <<~EOS
+      Create a project:
+        generate_project --project my-app --type node --no-github
+
+      Add Codex to an existing project:
+        generate_project --codex-only . --type node
+
+      Codex templates are bundled. Personal overrides may be placed in:
+        ~/.config/generate_project/codex/
+      Claude templates remain private and are loaded from:
+        ~/.config/generate_project/claude/
+
+      Publishing projects requires an authenticated GitHub CLI:
+        brew install gh
+        gh auth login
+    EOS
+  end
+
+  test do
+    project = testpath/"existing"
+    project.mkpath
+    system bin/"generate_project", "--project", project, "--codex-only", "--type", "node", "--prefix", "brew"
+    refute_path_exists testpath/"AGENTS.md"
+    assert_match "Stack: node", (project/"AGENTS.md").read
+    assert_match "`brew-`", (project/"AGENTS.md").read
+    assert_path_exists project/".agents/skills/project-checks/SKILL.md"
+    assert_path_exists project/".agents/skills/project-context/SKILL.md"
+    assert_path_exists project/".agents/skills/scoped-resources/SKILL.md"
+    assert_path_exists project/".codex/config.toml"
+    assert_equal "generate_project #{version}", shell_output("#{bin}/generate_project --version").strip
+  end
+end
